@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.play.services.fido)
+    implementation(libs.firebase.crashlytics.buildtools)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -71,7 +72,8 @@ dependencies {
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.compose.navigation)
 
-    ksp(libs.room.compiler)
+    ksp(libs.ksp.room.compiler)
+
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
 
@@ -96,5 +98,7 @@ dependencies {
 
     implementation (libs.play.services.auth)
 
+
     implementation(libs.androidx.datastore.preferences)
+
 }

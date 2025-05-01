@@ -2,4 +2,10 @@
 <resources>
 
     <style name="Theme.BikaServices" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.BikaServices.splash" parent="Theme.SplashScreen">
+      <item name="windowSplashScreenBackground">@color/teal_700</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/baseline</item>
+        <item name="postSplashScreenTheme">@style/Theme.BikaServices</item>
+    </style>
 </resources>

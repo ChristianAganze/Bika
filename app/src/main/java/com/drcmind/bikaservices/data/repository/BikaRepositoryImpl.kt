@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.map
 class BikaRepositoryImpl(
     private val dataStore : DataStore<Preferences>
     ):BikaRepository {
-    override suspend fun setCurrentUser(user: User?): Result<User?> {
+    override suspend fun setCurrentUserUseCase(user: User?): Result<User?> {
         return try {
             dataStore.edit { preferences->
                 preferences[PreferenceKeys.userName] = user?.name ?: ""
@@ -26,7 +26,7 @@ class BikaRepositoryImpl(
         }
     }
 
-    override suspend fun getCurrentUser(): Result<User?> {
+    override suspend fun getCurrentUserUseCase(): Result<User?> {
         return try {
             val currentUser = dataStore.data.map { preferences->
                 User(
