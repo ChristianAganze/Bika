@@ -26,7 +26,7 @@ import com.drcmind.bikaservices.domain.model.User
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppScreen(
+fun ProfileScreen(
     currentUser: User?,
     onSignOutClicked: () -> Unit
 ) {

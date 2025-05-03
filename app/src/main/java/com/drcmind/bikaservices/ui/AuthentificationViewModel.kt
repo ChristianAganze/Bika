@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 class AuthentificationViewModel(
     private val setCurrentUserUseCase: SetCurrentUserUseCase,
     private val getCurrentUserUseCase: GetCurrentUserUseCase
-  //private val useCases: UseCases
+
 ):ViewModel() {
     private var _currentUser: MutableStateFlow<User?> = MutableStateFlow(null)
     val currentUser = _currentUser.asStateFlow()
@@ -27,12 +27,14 @@ class AuthentificationViewModel(
         .onStart { getCurrentUser() }
         .stateIn(
             viewModelScope,
-            SharingStarted.WhileSubscribed(5000L),
+            SharingStarted.WhileSubscribed(3000L),
             true
         )
     fun login(user: User?) {
         viewModelScope.launch {
-            when(val result = setCurrentUserUseCase(user)){
+
+            val result = setCurrentUserUseCase(user)
+            when(result){
                is Result.Error<*> -> {
                    Log.d("BikaServicesDEBUG",result.message.toString())
                }
@@ -58,7 +60,7 @@ class AuthentificationViewModel(
             }
         }
     }
-    fun getCurrentUser() {
+    private fun getCurrentUser() {
         viewModelScope.launch {
             when (val result = getCurrentUserUseCase()) {
                 is Result.Error -> {

@@ -69,11 +69,9 @@ fun AuthenticationScreen(
                         painter = painterResource(R.drawable.baseline),
                         contentDescription = null,
                         modifier = Modifier
-
                             .fillMaxSize(0.6f),
                         contentScale = ContentScale.Fit
                     )
-
                     if(navigator.scaffoldValue[SupportingPaneScaffoldRole.Supporting] == PaneAdaptedValue.Hidden){
                         Button(
                             onClick = {

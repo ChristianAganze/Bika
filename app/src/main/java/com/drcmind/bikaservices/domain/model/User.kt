@@ -7,7 +7,6 @@ data class User(
     val email : String,
     val isLoggedIn : Boolean,
     val profilePictureUri : String = "",
-    //val bio: String? = null,
-    //val role: Role
+    //val role: UserRole
 )
 

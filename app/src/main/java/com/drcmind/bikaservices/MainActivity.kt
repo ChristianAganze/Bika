@@ -18,8 +18,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.drcmind.bikaservices.domain.model.User
 import com.drcmind.bikaservices.ui.AuthentificationViewModel
-import com.drcmind.bikaservices.ui.screens.AppScreen
 import com.drcmind.bikaservices.ui.screens.AuthenticationScreen
+import com.drcmind.bikaservices.ui.screens.ProfileScreen
 import com.drcmind.bikaservices.ui.theme.BikaServicesTheme
 import com.drcmind.bikaservices.ui.util.AuthentificationRoute
 import com.drcmind.bikaservices.ui.util.BikaRoutes
@@ -50,7 +50,8 @@ class MainActivity : ComponentActivity() {
             }
             BikaServicesTheme {
 
-                NavHost(navController = navController, startDestination = LoadingRoute){
+                NavHost(navController = navController,
+                    startDestination = LoadingRoute){
                     composable<LoadingRoute>{
                         LaunchedEffect(isLoading.value) {
                             if(currentUser.value!=null){
@@ -66,7 +67,6 @@ class MainActivity : ComponentActivity() {
                     }
 
                     composable<AuthentificationRoute>{
-
                         LaunchedEffect(currentUser.value) {
                             if(currentUser.value != null){
                                 navController.navigate(BikaRoutes){
@@ -76,15 +76,16 @@ class MainActivity : ComponentActivity() {
                                 }
                             }
                         }
-
                         AuthenticationScreen(
                             onSignInCliked = {
-                                lifecycleScope.launch{
+                                lifecycleScope.launch(){
                                     try {
-                                        val credentialResponse = credentialManager.getCredential(
+                                        Log.d("BikaServicesDEBUG", "onSignInCliked")
+
+                                       val credentialResponse = credentialManager.getCredential(
                                             request = request,
                                             context = this@MainActivity
-                                        )
+                                       )
                                         handleSignIn(
                                             response = credentialResponse,
                                             onSignInUser = {user->
@@ -94,17 +95,18 @@ class MainActivity : ComponentActivity() {
                                                 }
                                             }
                                         )
-                                    }catch (e : Exception){
+                                    }catch (e: Exception) {
                                         print(e)
+
+                                       // Log.w("BikaServicesDEBUG", "Connexion annulée par l'utilisateur.")
+
                                     }
                                 }
 
                             }
                         )
                     }
-
                    composable<BikaRoutes>{
-
                         LaunchedEffect(currentUser.value) {
                             if(currentUser.value == null){
                                 navController.navigate(AuthentificationRoute){
@@ -114,7 +116,7 @@ class MainActivity : ComponentActivity() {
                                 }
                             }
                         }
-                        AppScreen(
+                        ProfileScreen(
                             currentUser = currentUser.value,
                             onSignOutClicked = {
                                 viewModel.logout()
@@ -128,11 +130,12 @@ class MainActivity : ComponentActivity() {
     }
 
 
-    private fun handleSignIn(response: GetCredentialResponse, onSignInUser: (User?) -> Unit) {
+
+    private fun handleSignIn(response : GetCredentialResponse, onSignInUser : (User?)-> Unit){
         val credential = response.credential
-        when (credential) {
-            is CustomCredential -> {
-                if (credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
+        when(credential){
+            is CustomCredential ->{
+                if(credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL){
                     try {
                         val googleIdTokenCredential = GoogleIdTokenCredential
                             .createFrom(credential.data)
@@ -143,13 +146,14 @@ class MainActivity : ComponentActivity() {
                             isLoggedIn = true,
                             profilePictureUri = googleIdTokenCredential.profilePictureUri.toString()
                         )
+
                         onSignInUser(user)
-                    } catch (e: Exception) {
+                    }catch (e : Exception){
                         onSignInUser(null)
                         Log.e("BikaServicesDEBUG", "Erreur du token google de la reponse", e)
                     }
 
-                } else {
+                }else{
                     onSignInUser(null)
                     Log.e("BikaServicesDEBUG", "Coordonnée de connexion inconnue")
                 }

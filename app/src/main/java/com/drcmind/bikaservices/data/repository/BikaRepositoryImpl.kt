@@ -12,21 +12,20 @@ import kotlinx.coroutines.flow.map
 class BikaRepositoryImpl(
     private val dataStore : DataStore<Preferences>
     ):BikaRepository {
-    override suspend fun setCurrentUserUseCase(user: User?): Result<User?> {
+    override suspend fun    setCurrentUser(user: User?): Result<User?> {
         return try {
             dataStore.edit { preferences->
                 preferences[PreferenceKeys.userName] = user?.name ?: ""
                 preferences[PreferenceKeys.userEmail] = user?.email ?: ""
                 preferences[PreferenceKeys.userProfilePicture] = user?.profilePictureUri ?: ""
-                preferences[PreferenceKeys.isLoggedIn] = user?.isLoggedIn == true
+                preferences[PreferenceKeys.isLoggedIn] = user!!.isLoggedIn
             }
             Result.Success(user)
         }catch (e : Exception){
             Result.Error("Erreur lors de la modification de l'utilisateur : ${e.message}")
         }
     }
-
-    override suspend fun getCurrentUserUseCase(): Result<User?> {
+    override suspend fun getCurrentUser(): Result<User?> {
         return try {
             val currentUser = dataStore.data.map { preferences->
                 User(

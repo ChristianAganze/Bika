@@ -6,7 +6,7 @@ import com.drcmind.bikaservices.utils.Result
 
 class   GetCurrentUserUseCase(private val repository: BikaRepository){
     suspend operator fun invoke() : Result<User?>{
-        return repository.getCurrentUserUseCase()
+        return repository.getCurrentUser()
     }
 
 }
